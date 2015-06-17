@@ -84,6 +84,7 @@ angular.module('petroApp')
       oil: null
     };
 
+
     $scope.sumission = {
       labels: ["Total Water", "Total Oil", "Total Gas"],
       data: [$scope.totalWater, $scope.totalGas, $scope.totalOil]
@@ -92,6 +93,18 @@ angular.module('petroApp')
     $scope.higestOil = {
       labels: ["Water", "Oil", "Gas"],
       data: [$scope.highestOilData.oil, $scope.highestOilData.gas, $scope.highestOilData.water]
+    };
+
+    $scope.barChartData = {
+      labels: [],
+      series: ['Status', 'Stage'],
+      data: [[], []]
+    };
+
+    $scope.lineChartData = {
+      labels: [],
+      series: ['Oil', 'Water', 'Gas'],
+      data: [[], []]
     };
 
     initData();
@@ -108,14 +121,31 @@ angular.module('petroApp')
 
           var highest = 0,
           highestValueIndex = -1;
-          well.forEach(function (e, i){
+          well.some(function (e, i){
+            //For getting only 12 wells data
+            if(i == 15) return true;
+            //Calculating total oil, gas, water
             $scope.totalOil += e.oil;
             $scope.totalGas += e.gas;
             $scope.totalWater += e.water;
+
+            //Calculating highest oil, gas, water well
             if(e.oil > highest){
               highest = e.oil;
               highestValueIndex = i;
             }
+
+            //Parsing data for bar chart
+            $scope.barChartData.labels.push(e.name);
+            $scope.barChartData.data[0].push(e.status);
+            $scope.barChartData.data[1].push(e.stages);
+
+            //Parsing data for line chart
+            $scope.lineChartData.labels.push(e.name);
+            $scope.lineChartData.data[0].push(e.oil);
+            $scope.lineChartData.data[1].push(e.water);
+            $scope.lineChartData.data[1].push(e.gas);
+
           });
 
 

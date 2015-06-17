@@ -412,7 +412,6 @@ var app = angular.module('petroApp')
         .then(function(parsedData){
           console.log(parsedData);
           var a = parseData(parsedData.Sheet1);
-          debugger;
 
           $http.post('/api/dashboards/', {chartsData: a})
             .then(function (resp) {

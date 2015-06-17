@@ -38,10 +38,15 @@ exports.create = function(req, res) {
   if(!req.body || req.body && !(_.isArray(req.body.chartsData))) return res.status(400).send({error: 'Data not present'});
   var chartsData = req.body.chartsData;
 
-  Dashboard.create(chartsData, function(err, dashboard) {
+  Dashboard.remove(function(err) {
     if(err) { return handleError(res, err); }
-    return res.json(201, dashboard);
+    Dashboard.create(chartsData, function(err, dashboard) {
+      if(err) { return handleError(res, err); }
+      return res.json(201, dashboard);
+    });
+
   });
+
 };
 
 // Updates an existing dashboard in the DB.

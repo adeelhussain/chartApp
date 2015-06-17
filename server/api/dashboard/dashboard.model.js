@@ -54,7 +54,7 @@ var DashboardSchema = new Schema({
 });
 
 function toNumber(str){
-  if(!str) return str;
+  if(!str) return 0;
   return parseInt(str);
 }
 module.exports = mongoose.model('Dashboard', DashboardSchema);
