@@ -77,8 +77,8 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr ng-repeat="row in displayedCollection">
-                  <td>{{row.wellName}}</td>
+                <tr ng-repeat="row in displayedCollection | orderBy: 'name'">
+                  <td>{{row.name}}</td>
                   <td>{{row.latitude}}</td>
                   <td>{{row.longitude}}</td>
                   <td>{{row.apiNumber}}</td>
@@ -86,7 +86,7 @@
                   <td>{{row.status}}</td>
                   <td>{{row.rsvCat}}</td>
                   <td>{{row.latLength}}</td>
-                  <td>{{row.stage}}</td>
+                  <td>{{row.stages}}</td>
                   <td>{{row.fpd | date:'EEEE, MMMM d, y'}}</td>
                   <td>{{row.oil}}</td>
                   <td>{{row.gas}}</td>

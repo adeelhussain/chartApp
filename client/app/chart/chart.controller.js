@@ -97,8 +97,8 @@ angular.module('petroApp')
 
     $scope.barChartData = {
       labels: [],
-      series: ['Status', 'Stage'],
-      data: [[], []]
+      series: [ 'Stage'],
+      data: [[]]
     };
 
     $scope.lineChartData = {
@@ -137,8 +137,7 @@ angular.module('petroApp')
 
             //Parsing data for bar chart
             $scope.barChartData.labels.push(e.name);
-            $scope.barChartData.data[0].push(e.status);
-            $scope.barChartData.data[1].push(e.stages);
+            $scope.barChartData.data[0].push(e.stages);
 
             //Parsing data for line chart
             $scope.lineChartData.labels.push(e.name);
