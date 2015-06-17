@@ -1,0 +1,130 @@
+<div ng-include="'components/navbar/navbar.html'"></div>
+<div ng-include="'components/sidebar/sidebar.html'"></div>
+
+<div id="wrapper">
+  <div id="page-wrapper">
+      <!--<div class="row">
+          <div class="col-lg-12">
+              <h1 class="page-header">Charts</h1>
+          </div>
+          <div class="row">
+      <div class="col-lg-6 col-sm-12" id="line-chart">
+          <div class="panel panel-default">
+              &lt;!&ndash; adding fields &ndash;&gt;
+                  <h2>Add more data</h2>
+                    &lt;!&ndash; Todos Input &ndash;&gt;
+                    <form role="form" ng-submit="addTodo()">
+                      <div class="row">
+                        <div class="input-group">
+                          <input type="text" ng-model="todo" placeholder="Name of the field" autofocus>
+                          <span class="input-goup-btn">
+                            <input type="submit" class="btn btn-primary" value="Add">
+                          </span>
+                        </div>
+                      </div>
+                    </form>
+                    &lt;!&ndash; Todos List &ndash;&gt;
+                    <div ui-sortable ng-model="todos">
+                      <p class="input-group" ng-repeat="todo in todos track by $index" style="padding: 5px 10px; cursor: move;">
+                        <input type="text" ng-model="todo" class="form-control" />
+                        <span class="input-group-btn">
+                          <button class="btn btn-danger" ng-click="removeTodo($index)" aria-label="Remove">X</button>
+                        </span>
+                      </p>
+                    </div>
+                    &lt;!&ndash; calculate button &ndash;&gt;
+                    <a type="button" class="btn btn-success">Calculate</a>
+              <div class="panel-heading">Line Chart</div>
+              <div class="panel-body">
+                  <canvas id="line" class="chart chart-line chart-xl" data="line.data" labels="line.labels" legend="true"
+                  click="line.onClick" series="line.series"></canvas>
+                  
+                  &lt;!&ndash; creating excel sheet &ndash;&gt;
+                  <table>
+                    <tr class="column-label">
+                      <td></td>
+                      <td ng-repeat="column in columns">{{column}}</td>
+                    </tr>
+                    <tr ng-repeat="row in rows">
+                      <td class="row-label">{{row}}</td>
+                      <td ng-repeat="column in columns">
+                          <div>
+                            <input class="input" ng-model="cells[column+row]">
+                              <div ng-bind="compute(column+row)" class="output"></div>
+                          </div> 
+                      </td>
+                    </tr>
+                  </table>
+                  <div ng-bind="compute()" class="output"></div>
+              </div>
+          </div>
+      </div>
+      <div class="col-lg-6 col-sm-12" id="bar-chart" ng-controller="ChartCtrl">
+          <div class="panel panel-default">
+              <div class="panel-heading">Bar Chart</div>
+              <div class="panel-body">
+                  <canvas id="bar" class="chart chart-bar" data="bar.data" labels="bar.labels" series="bar.series"
+                  options="bar.options"></canvas>
+              </div>
+          </div>
+      </div>
+  </div>
+        </div>-->
+
+  <div class="row">
+      <!--Submissoins-->
+    <div class="col-lg-6 col-sm-12">
+          <div class="panel panel-default">
+              <div class="panel-heading">Submission of Oil, Water and Gas</div>
+              <div class="panel-body">
+              <canvas class="chart chart-doughnut chart-xs" data="sumission.data" labels="sumission.labels" legend="true"></canvas>
+              </div>
+          </div>
+      </div>
+
+    <!--Highest Oil-->
+    <div class="col-lg-6 col-sm-12">
+      <div class="panel panel-default">
+        <div class="panel-heading">Highest Oil</div>
+        <div class="panel-body">
+          <canvas  class="chart chart-doughnut chart-xs" data="higestOil.data" labels="higestOil.labels" legend="true"></canvas>
+        </div>
+      </div>
+    </div>
+
+      <div class="col-lg-6 col-sm-12" id="radar-chart">
+          <div class="panel panel-default">
+              <div class="panel-heading">Radar Chart</div>
+              <div class="panel-body">
+                  <canvas id="area" class="chart chart-radar" data="radar.data" labels="radar.labels" click="onClick"></canvas>
+              </div>
+          </div>
+      </div>
+      <div class="col-lg-6 col-sm-12" id="pie-chart">
+          <div class="panel panel-default">
+              <div class="panel-heading">Pie Chart</div>
+              <div class="panel-body">
+                  <canvas id="pie" class="chart chart-pie chart-xs" data="pie.data" labels="pie.labels"></canvas>
+              </div>
+          </div>
+      </div>
+      <div class="col-lg-6 col-sm-12" id="polar area-chart">
+        <div class="panel panel-default">
+          <div class="panel-heading">Polar Area Chart</div>
+          <div class="panel-body">
+            <canvas id="polar" class="chart chart-polar-area" data="polar.data" labels="polar.labels"></canvas>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-6 col-sm-12" id="base-chart">
+          <div class="panel panel-default">
+              <div class="panel-heading">Dynamic Chart</div>
+              <div class="panel-body">
+              <canvas id="base" class="chart chart-base" chart-type="dynamic.type" data="dynamic.data" labels="dynamic.labels" legend="true"></canvas>
+              </div>
+          </div>
+          <button type="button" class="btn btn-primary pull-right" ng-click="dynamic.toggle()">Toggle</button>
+      </div>
+  </div>
+  </div>
+</div>
