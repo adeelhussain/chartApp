@@ -388,7 +388,7 @@ var app = angular.module('petroApp')
     }
 
     //copy the references (you could clone ie angular.copy but then have to go through a dirty checking for the matches)
-    $scope.displayedCollection = [].concat($scope.rowCollection);
+    //$scope.displayedCollection = [].concat($scope.rowCollection);
 
     //add to the real data holder
     $scope.addRandomItem = function addRandomItem() {
@@ -396,6 +396,18 @@ var app = angular.module('petroApp')
       id++;
     };
 
+    $http.get('/api/dashboards/')
+      .then(function (resp){
+      var well = $scope.displayedCollection = resp.data;
+      console.log(data);
+      if(!well.length){
+        return;
+      }
+
+    },
+    function(err){
+      alert('Error in getting wells');
+    });
     //remove to the real data holder
     $scope.removeItem = function removeItem(row) {
       var index = $scope.rowCollection.indexOf(row);
