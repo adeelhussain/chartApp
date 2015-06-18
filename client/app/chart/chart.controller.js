@@ -71,10 +71,10 @@ angular.module('petroApp')
       return $parse($scope.cells[cell])($scope);
     };
 
-
     //Old Data ---------------------------
 
-
+    $scope.progress = 0;
+    $scope.isLoading = true;
     $scope.totalWater = null;
     $scope.totalOil = null;
     $scope.totalGas = null;
@@ -96,10 +96,10 @@ angular.module('petroApp')
     };
 
     $scope.barChartData = {
-      labels: [],
-      series: [ 'Stage'],
-      data: [[]]
-    };
+        labels: [],
+        series: [ 'Stage'],
+        data: [[]]
+      };
 
     $scope.lineChartData = {
       labels: [],
@@ -107,21 +107,40 @@ angular.module('petroApp')
       data: [[], []]
     };
 
+
+    $scope.generateCharts = function (){
+      var interval = setInterval(function (){
+        if($scope.progress < 100){
+          $scope.progress += (Math.floor((Math.random() * 10) + 1));
+          $scope.$digest();
+          console.log('asds')
+        }
+        else if($scope.progress >= 100){
+          clearInterval(interval);
+          $scope.isLoading = false;
+          initWellDataProcessing($scope.wellData);
+          $scope.$digest();
+        }
+      }, 200);
+
+    };
+
+
     initData();
 
     //Getting data from server
     function initData(){
       $http.get('/api/dashboards/')
         .then(function (resp) {
-          var well = $scope.wellData = resp.data;
-          console.log(data);
-          if(!well.length){
+
+          var wells = $scope.wellData = resp.data;
+          console.log(wells);
+          if(!wells.length){
             return;
           }
-
-          var highest = 0,
-          highestValueIndex = -1;
-          well.some(function (e, i){
+          /*var highest = 0,
+            highestValueIndex = -1;
+          wells.some(function (e, i){
             //For getting only 12 wells data
             if(i == 15) return true;
             //Calculating total oil, gas, water
@@ -149,7 +168,7 @@ angular.module('petroApp')
 
 
           //Get the highest one oil well
-          var highestWell = well[highestValueIndex];
+          var highestWell = wells[highestValueIndex];
           $scope.higestOil.data[0] = highestWell.water;
           $scope.higestOil.data[1] = highestWell.oil;
           $scope.higestOil.data[2] = highestWell.gas;
@@ -157,12 +176,57 @@ angular.module('petroApp')
           //After getting data from server, update the charts
           $scope.sumission.data[0] = $scope.totalWater;
           $scope.sumission.data[1] = $scope.totalGas;
-          $scope.sumission.data[2] = $scope.totalOil;
+          $scope.sumission.data[2] = $scope.totalOil;*/
+
+          //initWellDataProcessing(wells);
+
         },
         function (err) {
           alert('Error in Getting Data, Check the console for error');
           console.log(err)
         }
       )
+    }
+
+    function initWellDataProcessing(wells){
+      var highest = 0,
+        highestValueIndex = -1;
+      wells.some(function (e, i){
+        //For getting only 12 wells data
+        if(i == 15) return true;
+        //Calculating total oil, gas, water
+        $scope.totalOil += e.oil;
+        $scope.totalGas += e.gas;
+        $scope.totalWater += e.water;
+
+        //Calculating highest oil, gas, water well
+        if(e.oil > highest){
+          highest = e.oil;
+          highestValueIndex = i;
+        }
+
+        //Parsing data for bar chart
+        $scope.barChartData.labels.push(e.name);
+        $scope.barChartData.data[0].push(e.stages);
+
+        //Parsing data for line chart
+        $scope.lineChartData.labels.push(e.name);
+        $scope.lineChartData.data[0].push(e.oil);
+        $scope.lineChartData.data[1].push(e.water);
+        $scope.lineChartData.data[1].push(e.gas);
+
+      });
+
+
+      //Get the highest one oil well
+      var highestWell = wells[highestValueIndex];
+      $scope.higestOil.data[0] = highestWell.water;
+      $scope.higestOil.data[1] = highestWell.oil;
+      $scope.higestOil.data[2] = highestWell.gas;
+
+      //After getting data from server, update the charts
+      $scope.sumission.data[0] = $scope.totalWater;
+      $scope.sumission.data[1] = $scope.totalGas;
+      $scope.sumission.data[2] = $scope.totalOil;
     }
   }]);

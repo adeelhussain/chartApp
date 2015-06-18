@@ -9,9 +9,9 @@ angular.module('petroApp', [
   'ui.bootstrap',
   'smart-table',
   'chart.js',
-  'uiGmapgoogle-maps'
+  'ngMap'
 ])
-  .config(function ($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider, uiGmapGoogleMapApiProvider) {
+  .config(function ($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider) {
     $urlRouterProvider
       .otherwise('/');
 

@@ -19,8 +19,8 @@
     "jquery-ui": "~1.11.4",
     "handsontable": "~0.14.1",
     "angular-smart-table": "~2.1.0",
-    "angular-google-maps": "~2.1.4",
-    "js-xlsx": "~0.8.0"
+    "js-xlsx": "~0.8.0",
+    "ngmap": "~1.7.11"
   },
   "devDependencies": {
     "angular-mocks": ">=1.2.*",

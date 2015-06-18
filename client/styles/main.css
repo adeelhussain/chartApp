@@ -73,3 +73,24 @@ body {
 text-decoration: none;
 background-color: #eee;
 }
+
+/*Map Style*/
+#map_canvas {
+    border: 1px solid;
+    height: 100%;
+    margin: 0 0 15px 0;
+    padding: 10px;
+    width: 100%;
+}
+
+#map_canvas {
+    position: relative;
+}
+
+.angular-google-map-container {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+}

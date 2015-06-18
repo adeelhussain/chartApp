@@ -305,7 +305,7 @@ var data = [
 ];
 
 var app = angular.module('petroApp')
-  .controller('DashboardCtrl', ['$scope', '$http', '$q', function ($scope, $http, $q) {
+  .controller('DashboardCtrl', ['$scope', '$http', '$q', '$timeout', function ($scope, $http, $q, $timeout) {
 
     var wellnames = [];
     var latitudes = [];
@@ -396,20 +396,40 @@ var app = angular.module('petroApp')
       id++;
     };
 
-    $scope.map = { center: { latitude: 45, longitude: -73 }, zoom: 8 };
+    initData();
+    //Map related work
 
-    $http.get('/api/dashboards/')
-      .then(function (resp){
-      var well = $scope.displayedCollection = resp.data;
-      console.log(data);
-      if(!well.length){
-        return;
+    $scope.$on('mapInitialized', function(event, map) {
+      $scope.map = map;
+    });
+
+    function makeWellMarkers (wellData){
+      var markers = [];
+
+      wellData && wellData.forEach(function(well, i){
+        markers[i] = new google.maps.Marker({
+          title: "Hi marker " + i
+        })
+      })
+
+      wellData && wellData.forEach(function(well, i){
+        markers[i] = new google.maps.Marker({});
+        var latlng = new google.maps.LatLng(well.latitude, well.longitude);
+        markers[i].setPosition(latlng);
+        markers[i].setMap($scope.map);
+      })
+
+      var new_boundary = new google.maps.LatLngBounds();
+
+      for(var index in markers){
+        var  position = markers[index].position;
+        new_boundary.extend(position);
       }
 
-    },
-    function(err){
-      alert('Error in getting wells');
-    });
+      $scope.map.fitBounds(new_boundary);
+    }
+
+
     //remove to the real data holder
     $scope.removeItem = function removeItem(row) {
       var index = $scope.rowCollection.indexOf(row);
@@ -423,13 +443,14 @@ var app = angular.module('petroApp')
       if (!$scope.wellFile) return alert('Please select a file');
 
       extractData($scope.wellFile)
-        .then(function(parsedData){
+        .then(function (parsedData) {
           console.log(parsedData);
           var a = parseData(parsedData.Sheet1);
 
           $http.post('/api/dashboards/', {chartsData: a})
             .then(function (resp) {
               console.log(resp);
+              initData();
             },
             function (err) {
               alert('Error in importing Data File');
@@ -441,7 +462,7 @@ var app = angular.module('petroApp')
     function extractData(file) {
       var defer = $q.defer();
       var reader = new FileReader();
-      reader.onload = function(e) {
+      reader.onload = function (e) {
         var data = e.target.result;
         var workbook = XLSX.read(data, {type: 'binary'});
         var parsedData = toJson(workbook);
@@ -454,16 +475,16 @@ var app = angular.module('petroApp')
 
     function toJson(workbook) {
       var result = {};
-      workbook.SheetNames.forEach(function(sheetName) {
+      workbook.SheetNames.forEach(function (sheetName) {
         var roa = XLSX.utils.sheet_to_row_object_array(workbook.Sheets[sheetName]);
-        if(roa.length > 0){
+        if (roa.length > 0) {
           result[sheetName] = roa;
         }
       });
       return result;
     }
 
-    function parseData(rawData){
+    function parseData(rawData) {
       var data = [];
       var dataMapper = {
         WELL_NAME: 'name',
@@ -481,9 +502,9 @@ var app = angular.module('petroApp')
         Total_Water: 'water'
       };
 
-      rawData && rawData.forEach(function(single){
+      rawData && rawData.forEach(function (single) {
         var temp = {};
-        for(var prop in single){
+        for (var prop in single) {
 
           temp[dataMapper[prop]] = single[prop] || null;
         }
@@ -491,6 +512,24 @@ var app = angular.module('petroApp')
       });
 
       return data;
+    }
+
+    function initData (){
+      $http.get('/api/dashboards/')
+        .then(function (resp) {
+
+          var well = $scope.displayedCollection = resp.data;
+          console.log(well);
+          if (!well.length) {
+            return;
+          }
+
+          makeWellMarkers(well);
+
+        },
+        function (err) {
+          alert('Error in getting wells');
+        });
     }
 
   }]);
