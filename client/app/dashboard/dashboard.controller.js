@@ -320,7 +320,7 @@ var app = angular.module('petroApp')
     var oils = [];
     var gases = [];
     var waters = [];
-    var id
+    var id;
     console.log("the le of data is " + data.length);
 
 
@@ -395,6 +395,8 @@ var app = angular.module('petroApp')
       $scope.rowCollection.push(generateRandomItem(id));
       id++;
     };
+
+    $scope.map = { center: { latitude: 45, longitude: -73 }, zoom: 8 };
 
     $http.get('/api/dashboards/')
       .then(function (resp){
